@@ -3,7 +3,7 @@
 
 ## Is it any good?
 
-Meh. It was a Monday-morning project.
+Meh. It was a Monday-morning project. You can share favorite combinations, which is pretty cool.
 
 ## Author
 

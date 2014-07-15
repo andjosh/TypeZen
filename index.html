@@ -138,10 +138,13 @@
           <a href="#revealAbout" id="revealAbout" class="ga-link-trackable" data-gatrack-action="reveal about">About</a>
         </li>
         <li>
-          <a href="" class="ga-link-trackable" data-gatrack-action="reload" id="reload">Reload</a>
+          <a href="/" class="ga-link-trackable" data-gatrack-action="reload" id="reload">Reload</a>
         </li>
         <li>
-          <a href="" id="credit" target="_blank" class="ga-link-trackable" data-gatrack-action="credit font">Lucida Grande</a>
+          <a title="Open this font's details" href="" id="credit" target="_blank" class="ga-link-trackable" data-gatrack-action="credit font">Lucida Grande, regular</a>
+        </li>
+        <li>
+        <a href="#share" id="share" target="_blank" class="ga-link-trackable" data-gatrack-action="Share Combo">Tweet This Combo</a>
         </li>
       </ul>
       <div id="about">
@@ -184,31 +187,46 @@
         revealAbout = document.getElementById('revealAbout'),
         closeAbout = document.getElementById('closeAbout'),
         twP = document.getElementById('twitterProfile'),
-        infobox = document.getElementById('infobox');
+        infobox = document.getElementById('infobox'),
+        query = document.location.href.split('combo=');
 
       document.body.style.background = Please.make_color({value: chosenPair.value});
       infobox.style.color = chosenPair.type;
       twP.style.color = chosenPair.type;
       zenHeadline.style.color = chosenPair.type;
       zenHeadline.style.marginTop = (window.innerHeight/2 - 70).toString() + 'px';
-      request(zenUrl, function (err,data,xhr){ 
-        if (err) {
-          console.log("goterr ",err,'status='+xhr.status);
-          alert(JSON.parse(data).message);
-        } else {
-          handleZen(data);
-        }
-      });
-      request(fontUrl, function (err,data,xhr){ 
-        if (err) {
-          console.log("goterr ",err,'status='+xhr.status);
-        } else {
-          data = JSON.parse(data);
-          chooseFont(data.items);
-        }
-      });
       revealAbout.addEventListener('click', handleRevealAbout, false);
       closeAbout.addEventListener('click', handleCloseAbout, false);
+      if (query.length > 1){
+        var combo = query[1].split(';'),
+          placebo = [
+            {
+              family: combo[0].split('_').join(' '),
+              variants: [combo[1]],
+              subsets: ['latin']
+            }
+          ];
+        handleZen(decodeURIComponent(combo[2]).split('_').join(' '));
+        chooseFont(placebo);
+      } else {
+        request(zenUrl, function (err,data,xhr){ 
+          if (err) {
+            console.log("goterr ",err,'status='+xhr.status);
+            alert(JSON.parse(data).message);
+          } else {
+            handleZen(data);
+          }
+        });
+        request(fontUrl, function (err,data,xhr){ 
+          if (err) {
+            console.log("goterr ",err,'status='+xhr.status);
+          } else {
+            data = JSON.parse(data);
+            chooseFont(data.items);
+          }
+        });
+        setTimeout(readyTwitter, 1000);
+      }
 
       function handleRevealAbout(evt){
         evt.preventDefault();
@@ -238,6 +256,7 @@
         document.head.appendChild(newStyle);
         credit.textContent = [chosen.family, variant].join(', ');
         credit.href = "https://www.google.com/fonts/specimen/" + chosen.family;
+        readyTwitter();
       }
       function findFont(items){
         var chosen = items[Math.round(Math.random() * (items.length - 1))],
@@ -256,6 +275,21 @@
           zenHeadline.className = 'active';
           zenHeadline.contentEditable = true;
         }, 500);
+      }
+      function readyTwitter(){
+        var zen = zenHeadline.textContent.split(' ').join('_'),
+          font = credit.textContent.split(', ').join(';').split(' ').join('_'),
+          codedCombo = [font, zen].join(';');
+        document.getElementById('share').href = [
+          'http://twitter.com/home?status=',
+          '"',
+          zenHeadline.textContent,
+          '" in ',
+          credit.textContent,
+          ' http://jbckmn.github.io/TypeZen?combo=',
+          codedCombo,
+          ' via TypeZen'
+        ].join('');
       }
       function request(url,cb,method,post,contenttype){
         var requestTimeout,xhr;
