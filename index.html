@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-type" />
     <title>TypeZen</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta name="description" content="Your calming font-discovery resource." />
+    <meta name="description" content="Your calming font-discovery resource. From @jbckmn" />
     <meta name="HandheldFriendly" content="true" /><!-- BlackBerry, please don't f*** with my page -->
     <meta name="apple-mobile-web-app-capable" content="yes"><!-- iPhone save-to-home-screen-able -->
     <link rel="icon" href="http://andjosh.com/images/andjosh.png">
@@ -40,22 +40,23 @@
         position: fixed;
         top: 15px;
         font-size: 10px;
-        left: 12px;
+        left: 9px;
         margin:0;
         list-style: none;
         padding: 0;
       }
       #infobox li{
         display: inline-block;
+        padding: 0 3px;
       }
-      #infobox li a{
+      #infobox li a, #twitterProfile{
         color: inherit;
         background:rgba(0,0,0,0.1);
         border-radius: 3px;
         padding: 3px 5px;
         text-decoration: none;
       }
-      #infobox li a:hover{
+      #infobox li a:hover, #twitterProfile:hover{
         background:rgba(0,0,0,0.2);
       }
       #about:before{
@@ -111,6 +112,12 @@
         font-weight: 700;
         font-size: 30px;
       }
+      #twitterProfile{
+        position: fixed;
+        bottom: 10px;
+        left: 9px;
+        font-size: 10px;
+      }
     </style>
     <script type="text/javascript">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -125,6 +132,7 @@
   <body>
     <div id="mainDiv">
       <h1 id="zenHeadline" class="ga-hover-trackable">TypeZen</h1>
+      <a id="twitterProfile" rel="author" href="http://twitter.com/jbckmn" class="ga-link-trackable" data-gatrack-action="visit profile footer">@jbckmn</a>
       <ul id="infobox">
         <li>
           <a href="#revealAbout" id="revealAbout" class="ga-link-trackable" data-gatrack-action="reveal about">About</a>
@@ -133,17 +141,17 @@
           <a href="" class="ga-link-trackable" data-gatrack-action="reload" id="reload">Reload</a>
         </li>
         <li>
-          Font:<a href="" id="credit" target="_blank" class="ga-link-trackable" data-gatrack-action="credit font">Lucida Grande</a>
+          <a href="" id="credit" target="_blank" class="ga-link-trackable" data-gatrack-action="credit font">Lucida Grande</a>
         </li>
       </ul>
       <div id="about">
         <a href="#closeAbout" id="closeAbout" class="ga-link-trackable" data-gatrack-action="close about">&otimes;</a>
         <p>
-          Coded with curiosity and a Monday morning by <a href="http://twitter.com/jbckmn" class="ga-link-trackable" data-gatrack-action="visit profile">@jbckmn.</a>
+          Coded with a Monday morning by <a rel="author" href="http://twitter.com/jbckmn" class="ga-link-trackable" data-gatrack-action="visit profile">@jbckmn.</a>
           <br/><br/>
           <strong>ProTip #1:</strong> Set this page as your new-tab URL for inspiraiton all day.
           <br/><br/>
-          <strong>ProTip #2:</strong> The zen tenant is editable. Just click it and test out the font.
+          <strong>ProTip #2:</strong> The zen tenant is editable. Click it and test out the font.
           <br/><br/>
           Powered by <a href="https://api.github.com/zen">Github's Zen API</a> and <a href="https://www.google.com/fonts">Google's Web Fonts.</a>
         </p>
@@ -174,10 +182,13 @@
         credit = document.getElementById('credit'),
         reload = document.getElementById('reload'),
         revealAbout = document.getElementById('revealAbout'),
-        closeAbout = document.getElementById('closeAbout');
+        closeAbout = document.getElementById('closeAbout'),
+        twP = document.getElementById('twitterProfile'),
+        infobox = document.getElementById('infobox');
 
       document.body.style.background = Please.make_color({value: chosenPair.value});
-      document.getElementById('infobox').style.color = chosenPair.type;
+      infobox.style.color = chosenPair.type;
+      twP.style.color = chosenPair.type;
       zenHeadline.style.color = chosenPair.type;
       zenHeadline.style.marginTop = (window.innerHeight/2 - 70).toString() + 'px';
       request(zenUrl, function (err,data,xhr){ 
