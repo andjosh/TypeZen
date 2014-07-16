@@ -131,7 +131,7 @@
   </head>
   <body>
     <div id="mainDiv">
-      <h1 id="zenHeadline" class="ga-hover-trackable">TypeZen</h1>
+      <h1 id="zenHeadline" class="ga-hover-trackable">TypeZen - This ain't no side hustle.</h1>
       <a id="twitterProfile" rel="author" href="http://twitter.com/jbckmn" class="ga-link-trackable" data-gatrack-action="visit profile footer">@jbckmn</a>
       <ul id="infobox">
         <li>
@@ -154,7 +154,7 @@
           <br/><br/>
           <strong>ProTip #1:</strong> Set this page as your new-tab URL for inspiraiton all day.
           <br/><br/>
-          <strong>ProTip #2:</strong> The zen tenant is editable. Click it and test out the font.
+          <strong>ProTip #2:</strong> The zen tenet is editable. Click it and test out the font.
           <br/><br/>
           Powered by <a href="https://api.github.com/zen">Github's Zen API</a> and <a href="https://www.google.com/fonts">Google's Web Fonts.</a>
         </p>
@@ -211,15 +211,14 @@
       } else {
         request(zenUrl, function (err,data,xhr){ 
           if (err) {
-            console.log("goterr ",err,'status='+xhr.status);
-            alert(JSON.parse(data).message);
+            console.log("goterr ",err,'status='+xhr.status, JSON.parse(data));
           } else {
             handleZen(data);
           }
         });
         request(fontUrl, function (err,data,xhr){ 
           if (err) {
-            console.log("goterr ",err,'status='+xhr.status);
+            console.log("goterr ",err,'status='+xhr.status, JSON.parse(data));
           } else {
             data = JSON.parse(data);
             chooseFont(data.items);
@@ -254,6 +253,10 @@
         newStyle.type = 'text/css';
         newStyle.href = "http://fonts.googleapis.com/css?family=" + chosen.family +":" + variant;
         document.head.appendChild(newStyle);
+        setTimeout(function(){
+          zenHeadline.className = 'active';
+          zenHeadline.contentEditable = true;
+        }, 500);
         credit.textContent = [chosen.family, variant].join(', ');
         credit.href = "https://www.google.com/fonts/specimen/" + chosen.family;
         readyTwitter();
@@ -271,10 +274,6 @@
       }
       function handleZen(message){
         zenHeadline.textContent = message;
-        setTimeout(function(){
-          zenHeadline.className = 'active';
-          zenHeadline.contentEditable = true;
-        }, 500);
       }
       function readyTwitter(){
         var zen = zenHeadline.textContent.split(' ').join('_'),
